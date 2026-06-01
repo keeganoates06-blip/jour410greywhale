@@ -256,22 +256,67 @@ h1 {
 /* ============================================
    STORY TEXT SECTION
    ============================================ */
-
 .story-text p {
     max-width: 680px;
     margin: 0 auto 1.4em;
     font-size: 1.1em;
 }
 
+.bq-ocean {
+  max-width: 680px;
+  margin: 40px auto;
+  position: relative;
+  padding: 28px 32px 24px 32px;
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(135deg, rgba(29,158,117,0.07) 0%, rgba(55,138,221,0.05) 100%);
+  overflow: hidden;
+}
+
+/* gradient left bar */
+.bq-ocean::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(to bottom, #1D9E75, #378ADD);
+}
+
+/* fading bottom line */
+.bq-ocean::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, #1D9E75, #378ADD, transparent);
+  opacity: 0.4;
+}
+
+.bq-open-mark {
+  display: block;
+  font-size: 72px;
+  line-height: 0.6;
+  margin-bottom: 16px;
+  font-family: Georgia, serif;
+  color: #1D9E75;
+  opacity: 0.35;
+}
+
 blockquote {
-    max-width: 680px;
-    margin: 32px auto;
-    padding: 0 24px;
-    border-left: 4px solid var(--accent-color);
-    font-size: 1.3em;
-    font-style: italic;
-    color: var(--secondary-color);
-    line-height: 1.5;
+  margin: 0;
+  font-size: 1.25em;
+  font-style: italic;
+  font-family: Georgia, serif;
+  line-height: 1.65;
+}
+
+.bq-label {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1D9E75;
+  opacity: 0.7;
 }
 
 /* Alternate background for every other section */
@@ -280,7 +325,6 @@ blockquote {
     background-color: #f5f5f5;
     padding: 60px calc(50% - 500px + var(--spacing-unit));
 }
-
 /* ============================================
    PHOTOS / SLIDESHOW
    ============================================ */
