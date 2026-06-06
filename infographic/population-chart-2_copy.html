@@ -1,0 +1,328 @@
+<!-- ============================================
+     GRAY WHALE POPULATION CHART
+     Drop this block in place of the KnightLab
+     StoryLine iframe in your original site.
+     No dependencies — pure HTML/CSS/JS.
+============================================ -->
+
+<style>
+.gwc-wrap {
+  max-width: 700px;
+  margin: 40px auto;
+  font-family: 'Montserrat', sans-serif;
+}
+.gwc-title {
+  font-size: 1em;
+  font-weight: 700;
+  color: #12344d;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.gwc-subtitle {
+  font-size: 0.8em;
+  color: #5baed6;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.gwc-chart-outer {
+  position: relative;
+  background: linear-gradient(to bottom, #12344d, #0a1c2b);
+  border: 1px solid rgba(83,169,214,0.25);
+  border-radius: 14px;
+  padding: 24px 20px 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+#gwc-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+.gwc-tooltip {
+  position: absolute;
+  background: #0a1c2b;
+  border: 1px solid rgba(83,169,214,0.5);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75em;
+  color: #d9d9d9;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  z-index: 10;
+}
+.gwc-annotations {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.gwc-anno {
+  display: none;
+  padding: 12px 16px;
+  border-left: 3px solid #35A2D6;
+  background: rgba(18,52,77,0.6);
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 8px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.gwc-anno.orange { border-color: #ffffff; }
+.gwc-anno.show { display: block; }
+.gwc-anno.visible { opacity: 1; }
+.gwc-anno-year {
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5baed6;
+  margin-bottom: 3px;
+}
+.gwc-anno.orange .gwc-anno-year { color: #ffffff; }
+.gwc-anno-text {
+  font-size: 0.82em;
+  color: #d9d9d9;
+  line-height: 1.5;
+}
+.gwc-play-btn {
+  display: block;
+  margin: 18px auto 0;
+  background: linear-gradient(to right, #12344d, #1f6f99);
+  color: #fff;
+  border: 1px solid rgba(83,169,214,0.35);
+  border-radius: 999px;
+  padding: 10px 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s;
+}
+.gwc-play-btn:hover {
+  background: #35A2D6;
+  color: #0a1c2b;
+  transform: translateY(-2px);
+}
+</style>
+
+<div class="gwc-wrap">
+  <div class="gwc-title">Gray Whale Population Estimate</div>
+  <div class="gwc-subtitle">Eastern Pacific population, 1994 2025 Scroll down to watch the story unfold</div>
+
+  <div class="gwc-chart-outer">
+    <svg id="gwc-svg" viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gwc-recover-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#35A2D6" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#35A2D6" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="gwc-decline-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="gwc-glow">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Y axis labels -->
+      <text x="48" y="22"  fill="#5baed6" font-size="10" font-family="Montserrat,sans-serif" text-anchor="end">30k</text>
+      <text x="48" y="84"  fill="#5baed6" font-size="10" font-family="Montserrat,sans-serif" text-anchor="end">25k</text>
+      <text x="48" y="146" fill="#5baed6" font-size="10" font-family="Montserrat,sans-serif" text-anchor="end">20k</text>
+      <text x="48" y="208" fill="#5baed6" font-size="10" font-family="Montserrat,sans-serif" text-anchor="end">15k</text>
+      <text x="48" y="262" fill="#5baed6" font-size="10" font-family="Montserrat,sans-serif" text-anchor="end">10k</text>
+
+      <!-- Grid lines -->
+      <line x1="54" y1="18"  x2="810" y2="18"  stroke="rgba(83,169,214,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="54" y1="80"  x2="810" y2="80"  stroke="rgba(83,169,214,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="54" y1="142" x2="810" y2="142" stroke="rgba(83,169,214,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="54" y1="204" x2="810" y2="204" stroke="rgba(83,169,214,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="54" y1="262" x2="810" y2="262" stroke="rgba(83,169,214,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <!-- Axes -->
+      <line x1="54" y1="18" x2="54" y2="262" stroke="rgba(83,169,214,0.2)" stroke-width="1"/>
+      <line x1="54" y1="262" x2="810" y2="262" stroke="rgba(83,169,214,0.2)" stroke-width="1"/>
+
+      <!-- Fill areas (set by JS) -->
+      <path id="gwc-recover-area" d="" fill="url(#gwc-recover-fill)" opacity="0"/>
+      <path id="gwc-decline-area" d="" fill="url(#gwc-decline-fill)" opacity="0"/>
+
+      <!-- Main line (animated) -->
+      <path id="gwc-line" d=""
+        fill="none" stroke="#35A2D6" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"
+        filter="url(#gwc-glow)"
+        stroke-dasharray="2000" stroke-dashoffset="2000"/>
+
+      <!-- Dots -->
+      <g id="gwc-dots"></g>
+
+      <!-- X labels -->
+      <text x="68"  y="278" fill="#5baed6" font-size="9" font-family="Montserrat,sans-serif" text-anchor="middle">1994</text>
+      <text x="204" y="278" fill="#5baed6" font-size="9" font-family="Montserrat,sans-serif" text-anchor="middle">2000</text>
+      <text x="357" y="278" fill="#5baed6" font-size="9" font-family="Montserrat,sans-serif" text-anchor="middle">2008</text>
+      <text x="510" y="278" fill="#5baed6" font-size="9" font-family="Montserrat,sans-serif" text-anchor="middle">2016</text>
+      <text x="663" y="278" fill="#5baed6" font-size="9" font-family="Montserrat,sans-serif" text-anchor="middle">2020</text>
+      <text x="795" y="278" fill="#5baed6" font-size="9" font-family="Montserrat,sans-serif" text-anchor="middle">2025</text>
+    </svg>
+    <div class="gwc-tooltip" id="gwc-tip"></div>
+  </div>
+
+  <button class="gwc-play-btn" id="gwc-play-btn">Replay Animation</button>
+
+  <div class="gwc-annotations" id="gwc-annotations">
+    <div class="gwc-anno" data-idx="0">
+      <div class="gwc-anno-year">1994 Removed from Endangered Species List</div>
+      <div class="gwc-anno-text">Gray whale population estimated at ~21,000 After decades of protection from commercial whaling, the species is declared fully recovered a landmark conservation victory.</div>
+    </div>
+    <div class="gwc-anno" data-idx="1">
+      <div class="gwc-anno-year">2016 Population Peak</div>
+      <div class="gwc-anno-text">Numbers reach an estimated 27,000 whales Whale watching thrives along the California Central Coast, including in San Luis Obispo. Researchers consider the gray whale a model conservation success.</div>
+    </div>
+    <div class="gwc-anno orange" data-idx="2">
+      <div class="gwc-anno-year">2019-2020 NOAA Unusual Mortality Event</div>
+      <div class="gwc-anno-text">NOAA declares an Unusual Mortality Event as over 700 strandings are recorded along the Pacific Coast Scientists link the die-off to shrinking Arctic food supplies driven by climate change.</div>
+    </div>
+    <div class="gwc-anno orange" data-idx="3">
+      <div class="gwc-anno-year">2023 Nearly 50% Lost</div>
+      <div class="gwc-anno-text">Population estimated at ~14,500 - a near 50% drop from the 2016 peak Calf counts fall to historic lows. Whale watching businesses along the Central Coast report a near-total collapse in gray whale sightings.</div>
+    </div>
+    <div class="gwc-anno orange" data-idx="4">
+      <div class="gwc-anno-year">2025 San Francisco Bay Crisis</div>
+      <div class="gwc-anno-text">A record 21 gray whales strand in San Francisco Bay in a single season, likely due to starvation and exhaustion. Researchers including Dr. Ted Cheeseman call for the species to be relisted as endangered.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+(function(){
+  const data = [
+    {year:1994,pop:21000},{year:1996,pop:21500},{year:1998,pop:22000},
+    {year:2000,pop:22500},{year:2002,pop:23000},{year:2004,pop:23500},
+    {year:2006,pop:24200},{year:2008,pop:24800},{year:2010,pop:25500},
+    {year:2012,pop:26000},{year:2014,pop:26500},{year:2016,pop:27000},
+    {year:2018,pop:26000},{year:2019,pop:22000},{year:2020,pop:19000},
+    {year:2021,pop:17000},{year:2022,pop:15500},{year:2023,pop:14500},
+    {year:2024,pop:14200},{year:2025,pop:14000}
+  ];
+
+  const PL=54, PR=14, PT=18, PB=38, CW=820, CH=300;
+  const minP=10000, maxP=30000, minY=1994, maxY=2025;
+
+  function xPos(y){ return PL + (y-minY)/(maxY-minY)*(CW-PL-PR); }
+  function yPos(p){ return PT + (1-(p-minP)/(maxP-minP))*(CH-PT-PB); }
+
+  const pts = data.map(d=>({x:xPos(d.year),y:yPos(d.pop)}));
+  const lineD = pts.map((p,i)=>(i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`)).join(' ');
+  const di = data.findIndex(d=>d.year===2019);
+  const rp = pts.slice(0, di+1);
+  const dp = pts.slice(di);
+  const recD = rp.map((p,i)=>(i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`)).join(' ')
+    +` L${rp[rp.length-1].x},${CH-PB} L${rp[0].x},${CH-PB} Z`;
+  const decD = dp.map((p,i)=>(i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`)).join(' ')
+    +` L${dp[dp.length-1].x},${CH-PB} L${dp[0].x},${CH-PB} Z`;
+
+  const lineSVG = document.getElementById('gwc-line');
+  const dotsG   = document.getElementById('gwc-dots');
+  const recArea = document.getElementById('gwc-recover-area');
+  const decArea = document.getElementById('gwc-decline-area');
+  const tip     = document.getElementById('gwc-tip');
+  const outer   = document.querySelector('.gwc-chart-outer');
+
+  lineSVG.setAttribute('d', lineD);
+  recArea.setAttribute('d', recD);
+  decArea.setAttribute('d', decD);
+
+  // Dots
+  data.forEach((d,i)=>{
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', pts[i].x);
+    c.setAttribute('cy', pts[i].y);
+    c.setAttribute('r', '5');
+    c.setAttribute('fill', d.year>=2019 ? '#ffffff' : '#35A2D6');
+    c.setAttribute('stroke', '#0a1c2b');
+    c.setAttribute('stroke-width','2');
+    c.style.cursor='pointer';
+    c.style.opacity='0';
+    c.addEventListener('mouseenter', ()=>{
+      tip.textContent = `${d.year} — Est. ${d.pop.toLocaleString()} whales`;
+      tip.style.opacity='1';
+      const svgEl = document.getElementById('gwc-svg');
+      const svgRect = svgEl.getBoundingClientRect();
+      const outerRect = outer.getBoundingClientRect();
+      const scaleX = svgRect.width / 820;
+      const scaleY = svgRect.height / 300;
+      tip.style.left = (svgRect.left - outerRect.left + pts[i].x * scaleX - 60) + 'px';
+      tip.style.top  = (svgRect.top  - outerRect.top  + pts[i].y * scaleY - 38) + 'px';
+    });
+    c.addEventListener('mouseleave', ()=>{ tip.style.opacity='0'; });
+    dotsG.appendChild(c);
+  });
+
+  function runAnimation(){
+    // Reset
+    lineSVG.style.transition='none';
+    recArea.style.opacity='0';
+    decArea.style.opacity='0';
+    document.querySelectorAll('.gwc-anno').forEach(a=>{
+      a.classList.remove('show','visible');
+    });
+    dotsG.querySelectorAll('circle').forEach(c=>{ c.style.opacity='0'; c.style.transition='none'; });
+
+    const len = lineSVG.getTotalLength();
+    lineSVG.style.strokeDasharray = len;
+    lineSVG.style.strokeDashoffset = len;
+
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        lineSVG.style.transition = 'stroke-dashoffset 3.5s cubic-bezier(0.4,0,0.2,1)';
+        lineSVG.style.strokeDashoffset = '0';
+      });
+    });
+
+    setTimeout(()=>{
+      recArea.style.transition='opacity 1s';
+      recArea.style.opacity='1';
+      decArea.style.transition='opacity 1s';
+      decArea.style.opacity='1';
+    }, 2800);
+
+    dotsG.querySelectorAll('circle').forEach((c,i)=>{
+      setTimeout(()=>{ c.style.transition='opacity 0.3s'; c.style.opacity='1'; }, 200+i*160);
+    });
+
+    const delays = [500,1300,2500,3000,3500];
+    document.querySelectorAll('.gwc-anno').forEach((card,i)=>{
+      setTimeout(()=>{
+        card.classList.add('show');
+        setTimeout(()=>card.classList.add('visible'),50);
+      }, delays[i]);
+    });
+  }
+
+  // Run on load, with a small delay to ensure SVG is rendered and measurable
+  setTimeout(runAnimation, 300);
+
+  // Also run on scroll into view for cases where chart is below the fold
+  let hasRun = false;
+  const obs = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting && !hasRun){
+      hasRun = true;
+      runAnimation();
+    }
+  },{threshold:0.1});
+  const gwcTarget = document.querySelector('.gwc-wrap');
+  if(gwcTarget) obs.observe(gwcTarget);
+
+  // Replay button
+  document.getElementById('gwc-play-btn').addEventListener('click', ()=>{ runAnimation(); });
+})();
+}); // end DOMContentLoaded
+</script>
+<!-- END GRAY WHALE POPULATION CHART -->
